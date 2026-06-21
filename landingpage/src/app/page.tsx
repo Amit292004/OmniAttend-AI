@@ -347,7 +347,7 @@ export default function Home() {
           <motion.div className="flow-step" key={idx} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }}>
             <div className="flow-content">
               <span className="step-badge">{item.step}</span>
-              <h3 className="brand-font" style={{ fontSize: '2.5rem', marginBottom: '1rem', fontWeight: 800 }}>{item.title}</h3>
+              <h3 className="brand-font flow-heading">{item.title}</h3>
               <p style={{ fontSize: '1.1rem', opacity: 0.6 }}>{item.desc}</p>
             </div>
             <div className="flow-image premium-card" style={{ padding: 0 }}>
@@ -373,7 +373,7 @@ export default function Home() {
           <motion.div className="flow-step" key={idx} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }}>
             <div className="flow-content">
               <span className="step-badge" style={{ color: 'var(--primary)' }}>{item.step}</span>
-              <h3 className="brand-font" style={{ fontSize: '2.5rem', marginBottom: '1rem', fontWeight: 800 }}>{item.title}</h3>
+              <h3 className="brand-font flow-heading">{item.title}</h3>
               <p style={{ fontSize: '1.1rem', opacity: 0.6 }}>{item.desc}</p>
             </div>
             <div className="flow-image premium-card" style={{ padding: 0 }}>
