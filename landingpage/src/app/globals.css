@@ -417,7 +417,12 @@ h1, h2, h3, h4, .brand-font {
   .section { padding: 80px 24px; }
   .grid-3 { grid-template-columns: 1fr; }
   .flow-step, .flow-step:nth-child(even) { flex-direction: column; text-align: center; }
-  .flow-heading { font-size: 1.8rem; word-wrap: break-word; }
+  .flow-heading, .flow-content h3 { 
+    font-size: 1.8rem !important; 
+    overflow-wrap: break-word; 
+    word-break: break-word;
+    hyphens: auto;
+  }
   .footer { padding: 60px 24px 30px; }
   .footer-grid { grid-template-columns: 1fr; gap: 40px; }
 
