@@ -698,10 +698,10 @@
 }
 
 @media (max-width: 768px) {
-  .hero { padding: 6rem 1rem 4rem; min-height: auto; }
-  .headline { font-size: 3rem; }
-  .ctas { flex-direction: column; width: 100%; }
-  .ctaPrimary, .ctaGhost { width: 100%; justify-content: center; }
+  .hero { padding: 9.5rem 1.25rem 4rem; min-height: auto; }
+  .headline { font-size: 2.5rem; line-height: 1.15; }
+  .ctas { flex-direction: column; width: 100%; gap: 1rem; }
+  .ctaPrimary, .ctaGhost { width: 100%; justify-content: center; padding: 1rem; }
   .statsBar { flex-wrap: wrap; border-radius: 12px; }
   .statCell { flex-basis: 50%; padding: 1.25rem; }
   .statDivider { display: none; }
@@ -713,3 +713,4 @@
   .pricingCard.pro { transform: none; z-index: 1; }
   .pricingCard.pro:hover { transform: translateY(-5px); }
 }
+

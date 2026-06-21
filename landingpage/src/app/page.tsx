@@ -40,50 +40,54 @@ export default function Home() {
     <>
       <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} />
       <CompleteProfileModal />
+      <div className="bg-orb-1" />
+      <div className="bg-orb-2" />
+      <div className="bg-orb-3" />
 
       <nav className="navbar animate-fade-in-up">
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-          <img src="/img/logonew.png" alt="OmniAttend AI Logo" style={{ height: "32px" }} />
-          <div className="brand-font text-gradient" style={{ fontSize: '1.5rem', fontWeight: 700 }}>OmniAttend AI</div>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+          <img src="/img/logonew.png" alt="OmniAttend AI Logo" style={{ height: "30px" }} />
+          <div className="brand-font text-gradient nav-brand-text" style={{ fontSize: '1.35rem', fontWeight: 800 }}>OmniAttend AI</div>
         </Link>
         <div className="nav-links">
           <Link href="#features">Features</Link>
           <Link href="#journey">Journey</Link>
           <Link href="#tech">Tech Stack</Link>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           {loading ? (
             // Prevent flash of wrong buttons during auth check
-            <div style={{ width: 120, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.05)' }} />
+            <div style={{ width: 100, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.05)' }} />
           ) : user ? (
             <>
-              <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                <UserCircle2 size={14} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
+              <span className="nav-email-text" style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: '4px' }}>
+                <UserCircle2 size={13} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
                 {user.email}
               </span>
-              <Link href="http://localhost:8501/" className={styles.ctaPrimary} style={{ padding: "10px 20px", fontSize: "0.9rem" }}>
+              <Link href="http://localhost:8501/" className={styles.ctaPrimary} style={{ padding: "8px 16px", fontSize: "0.85rem", borderRadius: "8px" }}>
                 Open Portal
               </Link>
               <button
                 onClick={signOut}
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: 'rgba(255,255,255,0.6)', padding: '9px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontFamily: 'inherit', transition: 'all 0.2s' }}
+                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: 'rgba(255,255,255,0.6)', padding: '8px 12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontFamily: 'inherit', transition: 'all 0.2s' }}
                 onMouseEnter={e => (e.currentTarget.style.color = '#f72585')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
               >
-                <LogOut size={14} /> Sign out
+                <LogOut size={14} /> <span className="nav-signout-text">Sign out</span>
               </button>
             </>
           ) : (
             <>
               <button
                 onClick={() => setAuthOpen(true)}
-                style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: 'rgba(255,255,255,0.75)', padding: '9px 18px', cursor: 'pointer', fontFamily: 'inherit', fontSize: '0.9rem', fontWeight: 500, transition: 'all 0.2s' }}
+                className="nav-signin-btn"
+                style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: 'rgba(255,255,255,0.75)', padding: '8px 14px', cursor: 'pointer', fontFamily: 'inherit', fontSize: '0.85rem', fontWeight: 500, transition: 'all 0.2s' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(157,78,221,0.5)'; e.currentTarget.style.color = '#fff'; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)'; }}
               >
                 Sign in
               </button>
-              <button onClick={() => setAuthOpen(true)} className={styles.ctaPrimary} style={{ padding: "10px 20px", fontSize: "0.9rem", border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+              <button onClick={() => setAuthOpen(true)} className={styles.ctaPrimary} style={{ padding: "8px 16px", fontSize: "0.85rem", border: 'none', cursor: 'pointer', fontFamily: 'inherit', borderRadius: '8px' }}>
                 Get Started
               </button>
             </>
@@ -106,9 +110,9 @@ export default function Home() {
             Welcome to the Future of Attendance
           </motion.div>
           
-          <motion.div initial={{ opacity: 0, y: 20, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.7, delay: 0.1 }} style={{ marginBottom: '1.5rem' }}>
-            <img src="/img/logonew.png" alt="OmniAttend Cyber Brain" style={{ maxWidth: '600px', width: '100%', height: 'auto', display: 'block', margin: '0 auto 1.5rem' }} />
-            <h1 className={`${styles.headline} ${styles.accent}`} style={{ marginBottom: 0, fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.01em' }}>
+          <motion.div initial={{ opacity: 0, y: 20, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.7, delay: 0.1 }} style={{ marginBottom: '1rem', width: '100%' }}>
+            <img src="/img/logonew.png" alt="OmniAttend Cyber Brain" className="floating" style={{ maxWidth: '440px', width: '85%', height: 'auto', display: 'block', margin: '0 auto 1.5rem' }} />
+            <h1 className={`${styles.headline} ${styles.accent}`} style={{ marginBottom: 0 }}>
               AI - Powered Smart Attendance System
             </h1>
           </motion.div>
@@ -180,13 +184,13 @@ export default function Home() {
           <p className={styles.sectionSub}>Everything you need to automate your classroom seamlessly.</p>
         </motion.div>
         
-        <motion.div className={styles.featuresGrid} variants={staggerContainer} initial="initial" whileInView="whileInView" viewport={{ once: true, margin: "-50px" }}>
+        <motion.div className="bento-grid" variants={staggerContainer} initial="initial" whileInView="whileInView" viewport={{ once: true, margin: "-50px" }}>
           {[
-            { icon: <Camera size={32} strokeWidth={1.5} />, title: "AI Face Analysis", desc: "Advanced neural networks recognize every student's face from a single class photo, making attendance instant and accurate." },
+            { icon: <Camera size={32} strokeWidth={1.5} />, title: "AI Face Analysis", desc: "Advanced neural networks recognize every student's face from a single class photo, making attendance instant and accurate.", class: "bento-item-large" },
             { icon: <Mic size={32} strokeWidth={1.5} />, title: "Sequential Voice ID", desc: "Students say \"Present\" one-by-one, and our audio-AI matches their voice biometrics against stored embeddings in real-time." },
             { icon: <QrCode size={32} strokeWidth={1.5} />, title: "QR-Driven Roster", desc: "Course codes generate unique QR codes for instant student enrollment. No more manual entry or data management headaches." }
           ].map((feature, idx) => (
-            <motion.div className={styles.featureCard} key={idx} variants={fadeInUp}>
+            <motion.div className={`${styles.featureCard} ${feature.class || ''}`} key={idx} variants={fadeInUp}>
               <div className={styles.fIcon}>{feature.icon}</div>
               <h3 className={styles.fTitle}>{feature.title}</h3>
               <p className={styles.fDesc}>{feature.desc}</p>
@@ -203,50 +207,82 @@ export default function Home() {
           <motion.h2 className={styles.sectionTitle} {...fadeInUp}>The Teacher&apos;s Journey</motion.h2>
         </div>
 
-        {[
-          { step: "Step 01", title: "Secure Login", desc: "Start your session with our high-security authentication portal. Your data is encrypted and synced across all your devices.", img: "/img/demo/snap-teacher-flow-1-login.png" },
-          { step: "Step 02", title: "Interactive Dashboard", desc: "Manage all your subjects, attendance logs, and student rosters from a single, beautiful unified stream.", img: "/img/demo/snap-teacher-flow-2-dashboard.png" },
-          { step: "Step 03", title: "Course Management", desc: "Creating a new subject is a breeze. Just name it, and OmniAttend generates everything you need to start tracking.", img: "/img/demo/snap-teacher-flow-3-create-course.png" },
-          { step: "Step 04", title: "FaceID Attendance", desc: "Use high-speed computer vision to scan the entire room. Our AI identifies every student from a single class photo in milliseconds.", img: "/img/demo/snap-teacher-flow-5.2-photo-attendance.png" },
-          { step: "Step 05", title: "Voice ID Attendance", desc: "Switch to voice mode for a futuristic roll-call. Students speak sequentially, and our AI matches their unique voice signatures.", img: "/img/demo/snap-teacher-flow-5.1-voice-attendance.png" }
-        ].map((item, idx) => (
-          <motion.div className="flow-step" key={idx} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }}>
-            <div className="flow-content">
-              <span className="step-badge">{item.step}</span>
-              <h3 className="brand-font" style={{ fontSize: '2.5rem', marginBottom: '1rem', fontWeight: 800 }}>{item.title}</h3>
-              <p style={{ fontSize: '1.1rem', opacity: 0.6 }}>{item.desc}</p>
-            </div>
-            <div className="flow-image premium-card" style={{ padding: 0 }}>
-              <img src={item.img} alt={item.title} />
-            </div>
-          </motion.div>
-        ))}
+        <div className="timeline-container">
+          <div className="timeline-line" />
+          {[
+            { step: "Step 01", title: "Secure Login", desc: "Start your session with our high-security authentication portal. Your data is encrypted and synced across all your devices.", img: "/img/demo/snap-teacher-flow-1-login.png" },
+            { step: "Step 02", title: "Interactive Dashboard", desc: "Manage all your subjects, attendance logs, and student rosters from a single, beautiful unified stream.", img: "/img/demo/snap-teacher-flow-2-dashboard.png" },
+            { step: "Step 03", title: "Course Management", desc: "Creating a new subject is a breeze. Just name it, and OmniAttend generates everything you need to start tracking.", img: "/img/demo/snap-teacher-flow-3-create-course.png" },
+            { step: "Step 04", title: "FaceID Attendance", desc: "Use high-speed computer vision to scan the entire room. Our AI identifies every student from a single class photo in milliseconds.", img: "/img/demo/snap-teacher-flow-5.2-photo-attendance.png" },
+            { step: "Step 05", title: "Voice ID Attendance", desc: "Switch to voice mode for a futuristic roll-call. Students speak sequentially, and our AI matches their unique voice signatures.", img: "/img/demo/snap-teacher-flow-5.1-voice-attendance.png" }
+          ].map((item, idx) => (
+            <motion.div className="flow-step timeline-step" key={idx} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }}>
+              <div className="timeline-node" />
+              <div className="flow-content">
+                <span className="step-badge">{item.step}</span>
+                <h3 className="brand-font" style={{ fontSize: '2.1rem', marginBottom: '1rem', fontWeight: 800 }}>{item.title}</h3>
+                <p style={{ fontSize: '1.05rem', opacity: 0.6 }}>{item.desc}</p>
+              </div>
+              <div className="flow-image">
+                <div className="browser-frame">
+                  <div className="browser-header">
+                    <div className="browser-dots">
+                      <div className="browser-dot red" />
+                      <div className="browser-dot yellow" />
+                      <div className="browser-dot green" />
+                    </div>
+                    <div className="browser-address">omniattend.ai/teacher/{item.step.toLowerCase().replace(" ", "-")}</div>
+                  </div>
+                  <div className="browser-content">
+                    <img src={item.img} alt={item.title} />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </section>
 
       <div className={styles.sep} />
 
-      <section id="student-journey" className={styles.section} style={{ padding: '8rem 1.5rem', background: 'rgba(0,0,0,0.2)' }}>
+      <section id="student-journey" className={styles.section} style={{ padding: '8rem 1.5rem', background: 'rgba(0,0,0,0.1)' }}>
         <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
           <div className={styles.eyebrow} style={{ color: 'var(--primary)' }}>Workflow</div>
           <motion.h2 className={styles.sectionTitle} {...fadeInUp}>The Student&apos;s Journey</motion.h2>
         </div>
 
-        {[
-          { step: "Phase 01", title: "Instant Enrollment", desc: "Students join courses in seconds using unique QR codes or course links provided by their teachers. No tedious sign-up forms.", img: "/img/demo/snap-student-flow-1-login.png" },
-          { step: "Phase 02", title: "Biometric Registration", desc: "Students register their FaceID and VoiceID once. Our AI securely stores these biometrics for all future class sessions.", img: "/img/demo/snap-student-flow-2-enroll.png" },
-          { step: "Phase 03", title: "Personal Dashboard", desc: "A unified view for students to track their attendance percentage across all subjects and receive real-time updates.", img: "/img/demo/snap-student-flow-3-dashboard.png" }
-        ].map((item, idx) => (
-          <motion.div className="flow-step" key={idx} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }}>
-            <div className="flow-content">
-              <span className="step-badge" style={{ color: 'var(--primary)' }}>{item.step}</span>
-              <h3 className="brand-font" style={{ fontSize: '2.5rem', marginBottom: '1rem', fontWeight: 800 }}>{item.title}</h3>
-              <p style={{ fontSize: '1.1rem', opacity: 0.6 }}>{item.desc}</p>
-            </div>
-            <div className="flow-image premium-card" style={{ padding: 0 }}>
-              <img src={item.img} alt={item.title} />
-            </div>
-          </motion.div>
-        ))}
+        <div className="timeline-container">
+          <div className="timeline-line" />
+          {[
+            { step: "Phase 01", title: "Instant Enrollment", desc: "Students join courses in seconds using unique QR codes or course links provided by their teachers. No tedious sign-up forms.", img: "/img/demo/snap-student-flow-1-login.png" },
+            { step: "Phase 02", title: "Biometric Registration", desc: "Students register their FaceID and VoiceID once. Our AI securely stores these biometrics for all future class sessions.", img: "/img/demo/snap-student-flow-2-enroll.png" },
+            { step: "Phase 03", title: "Personal Dashboard", desc: "A unified view for students to track their attendance percentage across all subjects and receive real-time updates.", img: "/img/demo/snap-student-flow-3-dashboard.png" }
+          ].map((item, idx) => (
+            <motion.div className="flow-step timeline-step" key={idx} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }}>
+              <div className="timeline-node" style={{ borderColor: 'var(--secondary)', boxShadow: '0 0 15px var(--secondary)' }} />
+              <div className="flow-content">
+                <span className="step-badge" style={{ color: 'var(--secondary)' }}>{item.step}</span>
+                <h3 className="brand-font" style={{ fontSize: '2.1rem', marginBottom: '1rem', fontWeight: 800 }}>{item.title}</h3>
+                <p style={{ fontSize: '1.05rem', opacity: 0.6 }}>{item.desc}</p>
+              </div>
+              <div className="flow-image">
+                <div className="browser-frame" style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 245, 212, 0.05)' }}>
+                  <div className="browser-header">
+                    <div className="browser-dots">
+                      <div className="browser-dot red" />
+                      <div className="browser-dot yellow" />
+                      <div className="browser-dot green" />
+                    </div>
+                    <div className="browser-address">omniattend.ai/student/{item.step.toLowerCase().replace(" ", "-")}</div>
+                  </div>
+                  <div className="browser-content">
+                    <img src={item.img} alt={item.title} />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </section>
 
       <section id="tech" className={styles.section} style={{ background: 'var(--surface-card)', borderRadius: '32px', border: '1px solid var(--surface-border)', margin: '4rem auto' }}>
@@ -255,15 +291,15 @@ export default function Home() {
           <h2 className={styles.sectionTitle}>Advanced Tech Stack</h2>
         </motion.div>
         
-        <motion.div className={styles.techGrid} variants={staggerContainer} initial="initial" whileInView="whileInView" viewport={{ once: true, margin: "-50px" }}>
+        <motion.div className="bento-grid" variants={staggerContainer} initial="initial" whileInView="whileInView" viewport={{ once: true, margin: "-50px" }}>
           {[
             { icon: <LayoutDashboard size={28} strokeWidth={1.5} />, title: "Streamlit & React", desc: "Reactive frontend architecture paired with a robust landing layer.", tag: "Platform" },
             { icon: <Camera size={28} strokeWidth={1.5} />, title: "Face Registration", desc: "Leveraging FaceRecognition for high-fidelity facial biometrics.", tag: "Vision AI" },
             { icon: <Mic size={28} strokeWidth={1.5} />, title: "Voice Embeddings", desc: "Utilizing Resemblyzer for unique student voice signatures.", tag: "Audio AI" },
             { icon: <Server size={28} strokeWidth={1.5} />, title: "Supabase Cloud", desc: "Real-time PostgreSQL infrastructure with secure auth and sync.", tag: "Storage" }
           ].map((tech, idx) => (
-            <motion.div className={styles.featureCard} style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem 1.5rem' }} key={idx} variants={fadeInUp}>
-              <div className={styles.fIcon} style={{ borderRadius: '50%', width: '64px', height: '64px' }}>{tech.icon}</div>
+            <motion.div className={styles.featureCard} style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2.5rem 1.5rem' }} key={idx} variants={fadeInUp}>
+              <div className={styles.fIcon} style={{ borderRadius: '50%', width: '64px', height: '64px', margin: '0 auto 1.5rem' }}>{tech.icon}</div>
               <h4 className="brand-font" style={{ fontSize: '1.15rem', marginBottom: '8px', fontWeight: 700 }}>{tech.title}</h4>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', marginBottom: '20px' }}>{tech.desc}</p>
               <span className={styles.freeBadge} style={{ marginTop: 'auto' }}>{tech.tag}</span>
@@ -299,9 +335,8 @@ export default function Home() {
 
       <div className={styles.sep} />
 
-      {/* 2. Testimonials */}
-      {/* Testimonials — Removed (no real user data yet) */}
-      {/* Wall of Love section intentionally omitted until real user feedback is collected. */}
+      {/* 2. Real-Time Reviews (Wall of Love) */}
+      <ReviewsSection />
 
       <div className={styles.sep} />
 
