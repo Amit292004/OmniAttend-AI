@@ -568,7 +568,7 @@ export default function Home() {
           initial={{ opacity: 0, scale: 0.95, y: 30 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, cubicBezier: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* Top accent line */}
           <div style={{ position: 'absolute', top: 0, left: '0', right: '0', height: '4px', background: 'linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent)' }} />
