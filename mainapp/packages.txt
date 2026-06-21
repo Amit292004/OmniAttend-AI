@@ -1,0 +1,3 @@
+cmake
+ffmpeg
+libsndfile1-dev
