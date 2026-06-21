@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     "Voice Biometrics Attendance",
     "Classroom Automation",
     "Student Roster Management",
+    "Amit Sharma",
+    "Bounce Back Academy",
+    "Full Stack AI Developer"
   ],
   authors: [{ name: "Amit Sharma", url: "https://github.com/Amit292004" }],
   creator: "Amit Sharma",
@@ -96,6 +99,29 @@ export default function RootLayout({
           "AI Face Analysis: Detect and match student faces from a single classroom photo",
           "Sequential Voice ID: Audio biometrics for secure student check-ins",
           "QR-Driven Roster: Instant enrollment and student onboarding"
+        ]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://omniattend.ai/#amitsharma",
+        "name": "Amit Sharma",
+        "email": "amitsharma72020@gmail.com",
+        "url": "https://github.com/Amit292004",
+        "jobTitle": "Full Stack AI Developer",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "OmniAttend AI"
+        },
+        "knowsAbout": [
+          "Artificial Intelligence", 
+          "Computer Vision", 
+          "Software Development", 
+          "React", 
+          "Next.js"
+        ],
+        "sameAs": [
+          "https://github.com/Amit292004",
+          "https://bouncebackacademy.vercel.app/"
         ]
       },
       {

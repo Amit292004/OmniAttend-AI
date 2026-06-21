@@ -586,7 +586,7 @@ export default function Home() {
           <h3 className="brand-font" style={{ fontSize: '2.5rem', marginBottom: '0.5rem', fontWeight: 800, background: 'linear-gradient(to right, #fff, #e0aaff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Amit Sharma</h3>
           <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 500 }}>Full Stack AI Developer</p>
           <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '2.5rem', fontSize: '1.05rem', maxWidth: '500px', margin: '0 auto 2.5rem', lineHeight: 1.6 }}>
-            Passionate about bridging the gap between cutting-edge Artificial Intelligence and practical solutions. Creator of OmniAttend and Bounce Back Academy.
+            Passionate about bridging the gap between cutting-edge Artificial Intelligence and practical solutions. Creator of OmniAttend AI and Bounce Back Academy.
           </p>
           
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -599,7 +599,7 @@ export default function Home() {
             <a href="#" className={styles.ctaGhost} style={{ padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.95rem', border: '1px solid rgba(255,255,255,0.1)' }}>
               <Briefcase size={18} /> Portfolio Page
             </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" className={styles.ctaGhost} style={{ padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.95rem', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <a href="https://bouncebackacademy.vercel.app/" target="_blank" rel="noopener noreferrer" className={styles.ctaGhost} style={{ padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.95rem', border: '1px solid rgba(255,255,255,0.1)' }}>
               <GraduationCap size={18} /> Bounce Back Academy
             </a>
           </div>
