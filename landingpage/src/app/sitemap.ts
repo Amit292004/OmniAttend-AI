@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://omniattend.ai";
+  const baseUrl = "https://omni-attend-ai.vercel.app";
   
   return [
     {

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Amit Sharma", url: "https://github.com/Amit292004" }],
   creator: "Amit Sharma",
   publisher: "OmniAttend AI",
-  metadataBase: new URL("https://omniattend.ai"),
+  metadataBase: new URL("https://omni-attend-ai.vercel.app"),
   robots: {
     index: true,
     follow: true,
@@ -36,13 +36,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://omniattend.ai",
+    url: "https://omni-attend-ai.vercel.app",
     title: "OmniAttend AI | AI Powered Smart Attendance System",
     description: "Revolutionizing the classroom with next-gen computer vision and voice biometrics. Automated, fast, and secure.",
     siteName: "OmniAttend AI",
     images: [
       {
-        url: "https://omniattend.ai/img/logonew.png",
+        url: "https://omni-attend-ai.vercel.app/img/logonew.png",
         width: 800,
         height: 600,
         alt: "OmniAttend AI Logo",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "OmniAttend AI | AI Powered Smart Attendance System",
     description: "Revolutionizing the classroom with next-gen computer vision and voice biometrics.",
-    images: ["https://omniattend.ai/img/logonew.png"],
+    images: ["https://omni-attend-ai.vercel.app/img/logonew.png"],
   },
   icons: {
     icon: "/icon.png",
@@ -71,9 +71,9 @@ export default function RootLayout({
     "@graph": [
       {
         "@type": "SoftwareApplication",
-        "@id": "https://omniattend.ai/#software",
+        "@id": "https://omni-attend-ai.vercel.app/#software",
         "name": "OmniAttend AI",
-        "url": "https://omniattend.ai",
+        "url": "https://omni-attend-ai.vercel.app",
         "applicationCategory": "EducationalApplication",
         "operatingSystem": "All",
         "description": "Revolutionizing the classroom with next-gen computer vision and voice biometrics for instant attendance tracking.",
@@ -94,7 +94,7 @@ export default function RootLayout({
           "email": "amitsharma72020@gmail.com",
           "url": "https://github.com/Amit292004"
         },
-        "screenshot": "https://omniattend.ai/img/demo/snap-teacher-flow-2-dashboard.png",
+        "screenshot": "https://omni-attend-ai.vercel.app/img/demo/snap-teacher-flow-2-dashboard.png",
         "featureList": [
           "AI Face Analysis: Detect and match student faces from a single classroom photo",
           "Sequential Voice ID: Audio biometrics for secure student check-ins",
@@ -103,7 +103,7 @@ export default function RootLayout({
       },
       {
         "@type": "Person",
-        "@id": "https://omniattend.ai/#amitsharma",
+        "@id": "https://omni-attend-ai.vercel.app/#amitsharma",
         "name": "Amit Sharma",
         "email": "amitsharma72020@gmail.com",
         "url": "https://github.com/Amit292004",
