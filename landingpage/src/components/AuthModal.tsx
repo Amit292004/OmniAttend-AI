@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, KeyboardEvent, ClipboardEvent } from "react";
+import { useState, useEffect, useRef, KeyboardEvent, ClipboardEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Eye, EyeOff, Loader2, CheckCircle, AlertCircle, User, Phone, ChevronDown, ArrowLeft, Shield, ShieldCheck } from "lucide-react";
 import styles from "./AuthModal.module.css";
@@ -11,6 +11,7 @@ type Mode = "signin" | "signup" | "forgot" | "verify";
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialMode?: "signin" | "signup";
 }
 
 function GoogleIcon() {
@@ -24,8 +25,8 @@ function GoogleIcon() {
   );
 }
 
-export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const [mode, setMode] = useState<Mode>("signin");
+export default function AuthModal({ isOpen, onClose, initialMode = "signin" }: AuthModalProps) {
+  const [mode, setMode] = useState<Mode>(initialMode);
 
   // Form fields
   const [email, setEmail]         = useState("");
@@ -49,6 +50,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [loading, setLoading]           = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [msg, setMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setMode(initialMode);
+      setEmail(""); setPassword(""); setConfirm(""); setShowPass(false);
+      setFirstName(""); setLastName(""); setPhone(""); setRole("");
+      setOtp(["", "", "", "", "", ""]); setOtpToken(""); setMsg(null); setLoading(false);
+      setResendMsg("");
+    }
+  }, [isOpen, initialMode]);
 
   const reset = () => {
     setEmail(""); setPassword(""); setConfirm(""); setShowPass(false);
@@ -258,6 +269,26 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <img src="/img/logonew.png" alt="logo" className={styles.logoImg} />
               <span className={styles.logoText}>OmniAttend AI</span>
             </div>
+
+            {/* Tab Switcher */}
+            {mode !== "verify" && mode !== "forgot" && (
+              <div className={styles.tabContainer}>
+                <button
+                  type="button"
+                  className={`${styles.tabBtn} ${mode === "signin" ? styles.activeTab : ""}`}
+                  onClick={() => switchMode("signin")}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.tabBtn} ${mode === "signup" ? styles.activeTab : ""}`}
+                  onClick={() => switchMode("signup")}
+                >
+                  Register
+                </button>
+              </div>
+            )}
 
             {/* ════════════════════════════════
                 OTP VERIFICATION SCREEN

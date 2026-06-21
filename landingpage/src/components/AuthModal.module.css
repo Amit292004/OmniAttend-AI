@@ -441,3 +441,37 @@
   .otpGrid { gap: 0.4rem; }
 }
 
+/* ── Tab Switcher ── */
+.tabContainer {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 1.75rem;
+}
+
+.tabBtn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-radius: 9px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tabBtn:hover {
+  color: #fff;
+}
+
+.activeTab {
+  background: linear-gradient(135deg, #c77dff 0%, #7b2cbf 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(157, 78, 221, 0.3);
+}
+
