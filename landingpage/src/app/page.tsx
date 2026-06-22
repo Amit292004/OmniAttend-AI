@@ -88,7 +88,7 @@ export default function Home() {
                 <UserCircle2 size={14} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
                 {user.email}
               </span>
-              <Link href="http://localhost:8501/" className={styles.ctaPrimary} style={{ padding: "10px 16px", fontSize: "0.85rem" }}>
+              <Link href="https://omni-attend-ai.streamlit.app/" className={styles.ctaPrimary} style={{ padding: "10px 16px", fontSize: "0.85rem" }}>
                 Open Portal
               </Link>
               <button
@@ -192,7 +192,7 @@ export default function Home() {
                       <UserCircle2 size={16} />
                       {user.email}
                     </span>
-                    <Link href="http://localhost:8501/" onClick={() => setMenuOpen(false)} className={styles.ctaPrimary} style={{ width: '100%', justifyContent: 'center' }}>
+                    <Link href="https://omni-attend-ai.streamlit.app/" onClick={() => setMenuOpen(false)} className={styles.ctaPrimary} style={{ width: '100%', justifyContent: 'center' }}>
                       Open Portal
                     </Link>
                     <button
@@ -253,7 +253,7 @@ export default function Home() {
           
           <motion.div className={styles.ctas} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}>
             {user ? (
-              <Link href="http://localhost:8501/" className={styles.ctaPrimary}>
+              <Link href="https://omni-attend-ai.streamlit.app/" className={styles.ctaPrimary}>
                 Open Attendance Portal
               </Link>
             ) : (
@@ -466,7 +466,7 @@ export default function Home() {
               <li><Check size={18} /> Supabase Cloud Storage</li>
               <li><Check size={18} /> No mobile app required</li>
             </ul>
-            <Link href="http://localhost:8501/" className={styles.ctaPrimary} style={{ width: '100%', justifyContent: 'center' }}>Open the Portal</Link>
+            <Link href="https://omni-attend-ai.streamlit.app/" className={styles.ctaPrimary} style={{ width: '100%', justifyContent: 'center' }}>Open the Portal</Link>
           </motion.div>
         </motion.div>
       </section>
@@ -533,7 +533,7 @@ export default function Home() {
         </motion.p>
         
         <motion.div {...fadeInUp}>
-          <Link href="http://localhost:8501/" className={styles.ctaPrimary} style={{ padding: '1.25rem 2.5rem', fontSize: '1.1rem' }}>
+          <Link href="https://omni-attend-ai.streamlit.app/" className={styles.ctaPrimary} style={{ padding: '1.25rem 2.5rem', fontSize: '1.1rem' }}>
             Start AI Attendance Now
           </Link>
         </motion.div>
@@ -596,7 +596,7 @@ export default function Home() {
             <a href="https://github.com/Amit292004" target="_blank" rel="noopener noreferrer" className={styles.ctaGhost} style={{ padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.95rem', border: '1px solid rgba(255,255,255,0.1)' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub Profile
             </a>
-            <a href="#" className={styles.ctaGhost} style={{ padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.95rem', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <a href="https://amitsharma-portfolio-v2.vercel.app/" target="_blank" rel="noopener noreferrer" className={styles.ctaGhost} style={{ padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.95rem', border: '1px solid rgba(255,255,255,0.1)' }}>
               <Briefcase size={18} /> Portfolio Page
             </a>
             <a href="https://bouncebackacademy.vercel.app/" target="_blank" rel="noopener noreferrer" className={styles.ctaGhost} style={{ padding: '0.85rem 1.5rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.95rem', border: '1px solid rgba(255,255,255,0.1)' }}>
