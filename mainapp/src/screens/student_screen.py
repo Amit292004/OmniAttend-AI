@@ -151,7 +151,9 @@ def student_screen():
     if show_registration:
         with st.container(border=True):
             st.header('Register new Profile')
-            new_name = st.text_input("Enter your name", placeholder='E.g. Hamza Rizvi')
+            new_name = st.text_input("Enter your name *", placeholder='E.g. Hamza Rizvi')
+            student_email = st.text_input("Enter your email *", placeholder='E.g. hamza@example.com')
+            student_phone = st.text_input("Enter your phone number *", placeholder='E.g. +91 98765 43210')
 
             st.subheader('Optional : Voice Enrollment')
             st.info("Enroll your for voice only attendance")
@@ -165,32 +167,48 @@ def student_screen():
                 st.error('Audio Data failed!')
 
             if st.button('Create Account', type='primary'):
-                if new_name:
-                    with st.spinner('Creating profile..'):
-                        img = np.array(Image.open(photo_source))
-                        encodings= get_face_embeddings(img)
-                        if encodings:
-                            face_emb = encodings[0].tolist()
+                if new_name and student_email and student_phone:
+                    import re
+                    student_email = student_email.strip()
+                    student_phone = student_phone.strip()
+                    
+                    if not re.match(r"[^@]+@[^@]+\.[^@]+", student_email):
+                        st.error("Invalid email format!")
+                    elif not re.match(r"^\+?[\d\s\-()]{8,20}$", student_phone):
+                        st.error("Invalid phone number format (min 8 digits)!")
+                    else:
+                        with st.spinner('Creating profile..'):
+                            img = np.array(Image.open(photo_source))
+                            encodings= get_face_embeddings(img)
+                            if encodings:
+                                face_emb = encodings[0].tolist()
 
-                            voice_emb = None
-                            if audio_data:
-                                voice_emb = get_voice_embedding(audio_data.read())
+                                voice_emb = None
+                                if audio_data:
+                                    voice_emb = get_voice_embedding(audio_data.read())
 
-                            response_data = create_student(new_name, face_embedding=face_emb, voice_embedding=voice_emb)
-
-                            if response_data:
-                                train_classifier()
-                                st.session_state.is_logged_in = True
-                                st.session_state.user_role = 'student'
-                                st.session_state.student_data = response_data[0]
-                                st.toast(f'Profile Created! Hi {new_name}!')
-                                time.sleep(1)
-                                st.rerun()
-                        else:
-                            st.error('Couldnt capture your facial features for registration')
-
+                                st.session_state.temp_reg_data = {
+                                    'name': new_name,
+                                    'email': student_email,
+                                    'phone': student_phone,
+                                    'face_embedding': face_emb,
+                                    'voice_embedding': voice_emb
+                                }
+                                
+                                from src.utils.email_verify import send_otp_email, generate_otp
+                                from src.components.dialog_verify_email import verify_email_dialog
+                                
+                                otp = generate_otp()
+                                st.session_state.otp_code = otp
+                                with st.spinner("Sending verification email..."):
+                                    if send_otp_email(student_email, otp, new_name):
+                                        verify_email_dialog('student')
+                                    else:
+                                        st.error("Failed to send verification email. Please check your configuration.")
+                            else:
+                                st.error('Couldnt capture your facial features for registration')
                 else:
-                    st.warning('Please enter your name!')
+                    st.warning('Please fill in all required fields (Name, Email, and Phone)!')
 
 
         

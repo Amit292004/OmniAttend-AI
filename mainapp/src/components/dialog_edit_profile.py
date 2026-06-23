@@ -5,6 +5,7 @@ from src.pipelines.voice_pipeline import get_voice_embedding
 from PIL import Image
 import numpy as np
 import time
+import re
 
 @st.dialog("Edit Profile")
 def edit_teacher_profile_dialog():
@@ -13,6 +14,8 @@ def edit_teacher_profile_dialog():
     st.write("Update your profile information below.")
     
     new_name = st.text_input("Full Name", value=teacher_data.get('name', ''))
+    new_email = st.text_input("Email Address *", value=teacher_data.get('email', ''))
+    new_phone = st.text_input("Phone Number *", value=teacher_data.get('phone', ''))
     
     st.divider()
     st.write("Change Password (optional)")
@@ -23,6 +26,19 @@ def edit_teacher_profile_dialog():
     if st.button("Save Changes", type="primary", width="stretch"):
         if not new_name.strip():
             st.error("Name cannot be empty.")
+            return
+        if not new_email.strip() or not new_phone.strip():
+            st.error("Email and Phone number are compulsory.")
+            return
+            
+        new_email = new_email.strip()
+        new_phone = new_phone.strip()
+        
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", new_email):
+            st.error("Invalid email format.")
+            return
+        if not re.match(r"^\+?[\d\s\-()]{8,20}$", new_phone):
+            st.error("Invalid phone number format (min 8 digits).")
             return
             
         if new_password or confirm_password:
@@ -40,6 +56,8 @@ def edit_teacher_profile_dialog():
             updated_data = update_teacher(
                 teacher_data['teacher_id'], 
                 name=new_name, 
+                email=new_email,
+                phone=new_phone,
                 password=new_password if new_password else None
             )
             
@@ -60,6 +78,8 @@ def edit_student_profile_dialog():
     st.write("Update your profile information below.")
     
     new_name = st.text_input("Full Name", value=student_data.get('name', ''))
+    new_email = st.text_input("Email Address *", value=student_data.get('email', ''))
+    new_phone = st.text_input("Phone Number *", value=student_data.get('phone', ''))
     
     st.divider()
     
@@ -73,6 +93,19 @@ def edit_student_profile_dialog():
     if st.button("Save Changes", type="primary", width="stretch"):
         if not new_name.strip():
             st.error("Name cannot be empty.")
+            return
+        if not new_email.strip() or not new_phone.strip():
+            st.error("Email and Phone number are compulsory.")
+            return
+            
+        new_email = new_email.strip()
+        new_phone = new_phone.strip()
+        
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", new_email):
+            st.error("Invalid email format.")
+            return
+        if not re.match(r"^\+?[\d\s\-()]{8,20}$", new_phone):
+            st.error("Invalid phone number format (min 8 digits).")
             return
             
         with st.spinner("Saving profile..."):
@@ -93,6 +126,8 @@ def edit_student_profile_dialog():
             updated_data = update_student(
                 student_data['student_id'],
                 name=new_name,
+                email=new_email,
+                phone=new_phone,
                 face_embedding=face_emb,
                 voice_embedding=voice_emb
             )

@@ -17,9 +17,9 @@ def check_teacher_exists(username):
 
 
 
-def create_teacher(username, password, name):
+def create_teacher(username, password, name, email, phone):
 
-    data = { "username" : username, "password": hash_pass(password), "name": name}
+    data = { "username" : username, "password": hash_pass(password), "name": name, "email": email, "phone": phone}
     response = supabase.table("teachers").insert(data).execute()
     return response.data
 
@@ -33,8 +33,12 @@ def teacher_login(username, password):
     return None
 
 
-def update_teacher(teacher_id, name, password=None):
+def update_teacher(teacher_id, name, email=None, phone=None, password=None):
     data = {"name": name}
+    if email is not None:
+        data["email"] = email
+    if phone is not None:
+        data["phone"] = phone
     if password:
         data["password"] = hash_pass(password)
     response = supabase.table("teachers").update(data).eq("teacher_id", teacher_id).execute()
@@ -45,13 +49,17 @@ def get_all_students():
     response = supabase.table('students').select("*").execute()
     return response.data
 
-def create_student(new_name, face_embedding=None, voice_embedding=None):
-    data = {'name': new_name, 'face_embedding':face_embedding, "voice_embedding": voice_embedding}
+def create_student(new_name, email, phone, face_embedding=None, voice_embedding=None):
+    data = {'name': new_name, 'email': email, 'phone': phone, 'face_embedding':face_embedding, "voice_embedding": voice_embedding}
     response = supabase.table('students').insert(data).execute()
     return response.data
 
-def update_student(student_id, name, face_embedding=None, voice_embedding=None):
+def update_student(student_id, name, email=None, phone=None, face_embedding=None, voice_embedding=None):
     data = {"name": name}
+    if email is not None:
+        data["email"] = email
+    if phone is not None:
+        data["phone"] = phone
     if face_embedding is not None:
         data["face_embedding"] = face_embedding
     if voice_embedding is not None:

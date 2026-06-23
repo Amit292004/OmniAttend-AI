@@ -592,19 +592,25 @@ def teacher_screen_login():
 
 
 
-def register_teacher(teacher_username, teacher_name, teacher_pass, teacher_pass_confirm):
-    if not teacher_username or not teacher_name or not teacher_pass:
+def validate_teacher_registration(teacher_username, teacher_name, teacher_email, teacher_phone, teacher_pass, teacher_pass_confirm):
+    if not teacher_username or not teacher_name or not teacher_email or not teacher_phone or not teacher_pass:
         return False, "All Fields are required!"
+    
+    import re
+    teacher_email = teacher_email.strip()
+    teacher_phone = teacher_phone.strip()
+    
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", teacher_email):
+        return False, "Invalid email format!"
+    if not re.match(r"^\+?[\d\s\-()]{8,20}$", teacher_phone):
+        return False, "Invalid phone number format (min 8 digits)!"
+
     if check_teacher_exists(teacher_username):
         return False, "Username already taken"
     if teacher_pass != teacher_pass_confirm:
         return False, "Password doesn't match"
     
-    try:
-        create_teacher(teacher_username, teacher_pass, teacher_name)
-        return True, "Sucessfully Created! Login Now"
-    except Exception as e:
-        return False, "Unexpected Error!"
+    return True, ""
     
 
 def teacher_screen_register():
@@ -625,13 +631,17 @@ def teacher_screen_register():
         st.space()
 
         
-        teacher_username = st.text_input("Enter username", placeholder='amit@2004')
+        teacher_username = st.text_input("Enter username *", placeholder='amit@2004')
 
-        teacher_name = st.text_input("Enter name", placeholder='Amit Sharma')
+        teacher_name = st.text_input("Enter name *", placeholder='Amit Sharma')
 
-        teacher_pass = st.text_input("Enter password", type='password', placeholder="Enter password")
+        teacher_email = st.text_input("Enter email *", placeholder='amit@example.com')
 
-        teacher_pass_confirm = st.text_input("Confirm your password", type='password', placeholder="Enter password")
+        teacher_phone = st.text_input("Enter phone number *", placeholder='+91 98765 43210')
+
+        teacher_pass = st.text_input("Enter password *", type='password', placeholder="Enter password")
+
+        teacher_pass_confirm = st.text_input("Confirm your password *", type='password', placeholder="Enter password")
 
         st.divider()
 
@@ -639,13 +649,25 @@ def teacher_screen_register():
 
         with btnc1:
             if st.button('Register now', icon=':material/passkey:', shortcut='control+enter', width='stretch'):
-                success, message = register_teacher(teacher_username, teacher_name, teacher_pass, teacher_pass_confirm)
+                success, message = validate_teacher_registration(teacher_username, teacher_name, teacher_email, teacher_phone, teacher_pass, teacher_pass_confirm)
                 if success:
-                    st.success(message)
-                    import time
-                    time.sleep(2)
-                    st.session_state.teacher_login_type = "login"
-                    st.rerun()
+                    st.session_state.temp_reg_data = {
+                        'username': teacher_username,
+                        'name': teacher_name,
+                        'email': teacher_email,
+                        'phone': teacher_phone,
+                        'password': teacher_pass
+                    }
+                    from src.utils.email_verify import send_otp_email, generate_otp
+                    from src.components.dialog_verify_email import verify_email_dialog
+                    
+                    otp = generate_otp()
+                    st.session_state.otp_code = otp
+                    with st.spinner("Sending verification email..."):
+                        if send_otp_email(teacher_email, otp, teacher_name):
+                            verify_email_dialog('teacher')
+                        else:
+                            st.error("Failed to send verification email. Please check your configuration.")
                 else:
                     st.error(message)
 
