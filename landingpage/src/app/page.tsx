@@ -5,31 +5,15 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Camera, Mic, QrCode, Shield, Server, LayoutDashboard, Check, ChevronDown, School, Building, Users, LogOut, UserCircle2, Menu, X, Mail, Briefcase, GraduationCap } from "lucide-react";
 import styles from "./page.module.css";
-import AuthModal from "@/components/AuthModal";
-import CompleteProfileModal from "@/components/CompleteProfileModal";
-import { useAuth } from "@/contexts/AuthContext";
 import ReviewsSection from "@/components/ReviewsSection";
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [authOpen, setAuthOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user, signOut, loading } = useAuth();
-
-  const openSignIn = () => {
-    setAuthMode("signin");
-    setAuthOpen(true);
-  };
-
-  const openSignUp = () => {
-    setAuthMode("signup");
-    setAuthOpen(true);
-  };
 
   // Listen for the custom event dispatched by ReviewsSection's Sign In button
   useEffect(() => {
-    const handler = () => openSignIn();
+    const handler = () => { window.location.href = '/portal'; };
     window.addEventListener('open-auth-modal', handler);
     return () => window.removeEventListener('open-auth-modal', handler);
   }, []);
@@ -63,9 +47,6 @@ export default function Home() {
 
   return (
     <>
-      <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} initialMode={authMode} />
-      <CompleteProfileModal />
-
       <nav className="navbar animate-fade-in-up">
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
           <img src="/img/logonew.png" alt="OmniAttend AI Logo" style={{ height: "32px" }} />
@@ -79,43 +60,9 @@ export default function Home() {
           <Link href="#tech">Tech Stack</Link>
         </div>
         <div className="hide-mobile" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          {loading ? (
-            // Prevent flash of wrong buttons during auth check
-            <div style={{ width: 120, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.05)' }} />
-          ) : user ? (
-            <>
-              <span className="hide-mobile" style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                <UserCircle2 size={14} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
-                {user.email}
-              </span>
-              <Link href="https://omni-attend-ai.streamlit.app/" className={styles.ctaPrimary} style={{ padding: "10px 16px", fontSize: "0.85rem" }}>
-                Open Portal
-              </Link>
-              <button
-                onClick={signOut}
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: 'rgba(255,255,255,0.6)', padding: '9px 12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontFamily: 'inherit', transition: 'all 0.2s' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#f72585')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}
-              >
-                <LogOut size={14} />
-                <span className="hide-mobile">Sign out</span>
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={openSignIn}
-                style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: 'rgba(255,255,255,0.75)', padding: '9px 14px', cursor: 'pointer', fontFamily: 'inherit', fontSize: '0.85rem', fontWeight: 500, transition: 'all 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(157,78,221,0.5)'; e.currentTarget.style.color = '#fff'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)'; }}
-              >
-                Sign in
-              </button>
-              <button onClick={openSignUp} className={styles.ctaPrimary} style={{ padding: "10px 16px", fontSize: "0.85rem", border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
-                Get Started
-              </button>
-            </>
-          )}
+          <a href="/portal" className={styles.ctaPrimary} style={{ padding: "10px 16px", fontSize: "0.85rem" }}>
+            Open Portal
+          </a>
         </div>
         
         {/* Mobile Hamburger Menu Button */}
@@ -181,44 +128,9 @@ export default function Home() {
               <div style={{ height: '1px', background: 'var(--surface-border)' }} />
               
               <div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.12em', color: 'var(--secondary)', textTransform: 'uppercase', marginBottom: '1.25rem' }}>
-                  ACCOUNT
-                </div>
-                {loading ? (
-                  <div style={{ width: '100%', height: 44, borderRadius: 8, background: 'rgba(255,255,255,0.05)' }} />
-                ) : user ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                    <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <UserCircle2 size={16} />
-                      {user.email}
-                    </span>
-                    <Link href="https://omni-attend-ai.streamlit.app/" onClick={() => setMenuOpen(false)} className={styles.ctaPrimary} style={{ width: '100%', justifyContent: 'center' }}>
-                      Open Portal
-                    </Link>
-                    <button
-                      onClick={() => { signOut(); setMenuOpen(false); }}
-                      style={{ width: '100%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: 'rgba(255,255,255,0.6)', padding: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '0.9rem', fontFamily: 'inherit', transition: 'all 0.2s' }}
-                    >
-                      <LogOut size={16} /> Sign out
-                    </button>
-                  </div>
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <button
-                      onClick={() => { openSignIn(); setMenuOpen(false); }}
-                      style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', color: 'rgba(255,255,255,0.75)', padding: '12px', cursor: 'pointer', fontFamily: 'inherit', fontSize: '0.95rem', fontWeight: 500, transition: 'all 0.2s' }}
-                    >
-                      Sign in
-                    </button>
-                    <button
-                      onClick={() => { openSignUp(); setMenuOpen(false); }}
-                      className={styles.ctaPrimary}
-                      style={{ width: '100%', justifyContent: 'center', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
-                    >
-                      Get Started
-                    </button>
-                  </div>
-                )}
+                <a href="/portal" onClick={() => setMenuOpen(false)} className={styles.ctaPrimary} style={{ width: '100%', justifyContent: 'center' }}>
+                  Open Portal
+                </a>
               </div>
             </div>
           </motion.div>
@@ -252,15 +164,9 @@ export default function Home() {
           </motion.p>
           
           <motion.div className={styles.ctas} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}>
-            {user ? (
-              <Link href="https://omni-attend-ai.streamlit.app/" className={styles.ctaPrimary}>
-                Open Attendance Portal
-              </Link>
-            ) : (
-              <button onClick={openSignUp} className={styles.ctaPrimary} style={{ border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1rem' }}>
-                Start AI Attendance
-              </button>
-            )}
+            <a href="/portal" className={styles.ctaPrimary}>
+              Open Attendance Portal
+            </a>
             <Link href="#journey" className={styles.ctaGhost}>
               Explore Journey
             </Link>
@@ -466,7 +372,7 @@ export default function Home() {
               <li><Check size={18} /> Supabase Cloud Storage</li>
               <li><Check size={18} /> No mobile app required</li>
             </ul>
-            <Link href="https://omni-attend-ai.streamlit.app/" className={styles.ctaPrimary} style={{ width: '100%', justifyContent: 'center' }}>Open the Portal</Link>
+            <a href="/portal" className={styles.ctaPrimary} style={{ width: '100%', justifyContent: 'center' }}>Open the Portal</a>
           </motion.div>
         </motion.div>
       </section>
@@ -533,9 +439,9 @@ export default function Home() {
         </motion.p>
         
         <motion.div {...fadeInUp}>
-          <Link href="https://omni-attend-ai.streamlit.app/" className={styles.ctaPrimary} style={{ padding: '1.25rem 2.5rem', fontSize: '1.1rem' }}>
+          <a href="/portal" className={styles.ctaPrimary} style={{ padding: '1.25rem 2.5rem', fontSize: '1.1rem' }}>
             Start AI Attendance Now
-          </Link>
+          </a>
         </motion.div>
       </section>
 

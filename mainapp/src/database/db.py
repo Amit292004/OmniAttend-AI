@@ -25,7 +25,8 @@ def create_teacher(username, password, name, email, phone):
 
 
 def teacher_login(username, password):
-    response = supabase.table("teachers").select("*").eq("username", username).execute()
+    # Support login with either username or email
+    response = supabase.table("teachers").select("*").or_(f"username.eq.{username},email.eq.{username}").execute()
     if response.data:
         teacher = response.data[0]
         if check_pass(password, teacher['password']):
@@ -114,6 +115,11 @@ def  unenroll_student_to_subject(student_id, subject_id):
 def get_student_subjects(student_id):
     response = supabase.table('subject_students').select('*, subjects(*)').eq('student_id', student_id).execute()
     return response.data
+
+def get_subject_students(subject_id):
+    response = supabase.table('subject_students').select('*, students(*)').eq('subject_id', subject_id).execute()
+    return response.data
+
 
 
 def get_student_attendance(student_id):

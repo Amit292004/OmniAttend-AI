@@ -2,10 +2,9 @@ from resemblyzer import VoiceEncoder, preprocess_wav
 import numpy as np 
 import io
 import librosa
-import streamlit as st
+from functools import lru_cache
 
-
-@st.cache_resource
+@lru_cache(maxsize=1)
 def load_voice_encoder():
     return VoiceEncoder()
 
@@ -17,9 +16,9 @@ def get_voice_embedding(audio_bytes):
         audio, sr = librosa.load(io.BytesIO(audio_bytes), sr=16000)
         wav = preprocess_wav(audio)
         embedding = encoder.embed_utterance(wav)
-        return embedding.tolist()
+        return embedding  # return numpy array
     except Exception as e:
-        st.error('Voice recog error')
+        print(f"Voice recog error: {e}")
         return None
     
 
@@ -41,6 +40,19 @@ def identify_speaker(new_embedding, candidates_dict, threshold=0.65):
         return best_sid, best_score
     
     return None, best_score
+
+
+def compare_voice_embeddings(new_embedding, stored_embedding, threshold=0.65):
+    """Compare two embeddings (numpy arrays). Returns True if they match."""
+    try:
+        new_np = np.array(new_embedding)
+        stored_np = np.array(stored_embedding)
+        # Cosine similarity (embeddings are already L2-normalised by resemblyzer)
+        similarity = float(np.dot(new_np, stored_np) / (np.linalg.norm(new_np) * np.linalg.norm(stored_np) + 1e-8))
+        return similarity >= threshold
+    except Exception as e:
+        print(f"Voice compare error: {e}")
+        return False
 
 
 
@@ -72,5 +84,5 @@ def process_bulk_audio(audio_bytes, candidates_dict, threshold=0.65):
 
         return identified_results
     except Exception as e:
-        st.error('Bulk process error')
+        print(f"Bulk process error: {e}")
         return {}

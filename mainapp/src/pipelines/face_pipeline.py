@@ -4,10 +4,10 @@ import dlib
 import numpy as np
 import face_recognition_models
 from sklearn.svm import SVC
-import streamlit as st
 import os
 import ctypes
 from ctypes import wintypes
+from functools import lru_cache
 
 from src.database.db import get_all_students
 
@@ -24,7 +24,7 @@ def get_safe_model_path(model_path):
         
     return safe_path
 
-@st.cache_resource
+@lru_cache(maxsize=1)
 def load_dlib_models():
     detector = dlib.get_frontal_face_detector() 
 
@@ -49,7 +49,7 @@ def get_face_embeddings(image_np):
         encodings.append(np.array(face_descriptor))
     return encodings
 
-@st.cache_resource
+@lru_cache(maxsize=1)
 def get_trained_model():
     X = []
     y = []
@@ -73,14 +73,17 @@ def get_trained_model():
 
     try:
         clf.fit(X, y)
-    except ValueError:
-        pass
+    except (ValueError, Exception) as e:
+        print(f"[face_pipeline] SVC fit error (likely < 2 distinct classes): {e}")
+        # Fall back: return model_data so single-class lookup via Euclidean distance still works
+        # but mark clf as None so predict_attendance won't call clf.predict
+        return {'clf': None, 'X': X, 'y': y}
 
-    return {'clf': clf, 'X':X, "y":y}
+    return {'clf': clf, 'X': X, 'y': y}
 
 
 def train_classifier():
-    st.cache_resource.clear()
+    get_trained_model.cache_clear()
     model_data = get_trained_model()
     return bool(model_data)
 
@@ -102,10 +105,13 @@ def predict_attendance(class_image_np):
     all_students = sorted(list(set(y_train)))
 
     for encoding in encodings:
-        if len(all_students)>= 2:
-            predicted_id= int(clf.predict([encoding])[0])
+        clf = model_data['clf']
+        if clf is not None and len(all_students) >= 2:
+            predicted_id = int(clf.predict([encoding])[0])
         else:
-            predicted_id = int(all_students[0])
+            # Nearest-neighbor fallback (works for 1 class too)
+            distances = [np.linalg.norm(np.array(x) - encoding) for x in X_train]
+            predicted_id = int(y_train[int(np.argmin(distances))])
 
         student_embedding = X_train[y_train.index(predicted_id)]
 
