@@ -16,7 +16,7 @@ export default function StudentsPage() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/attendance/students")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/students`)
       .then(res => res.json())
       .then(data => {
         const mapped = (data.students || []).map((s: any) => {

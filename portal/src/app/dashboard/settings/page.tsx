@@ -120,7 +120,7 @@ export default function SettingsPage() {
     try {
       if (isTeacher) {
         // Teacher profile text update
-        const res = await fetch(`http://localhost:8000/api/profile/teacher/${user.teacher_id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/profile/teacher/${user.teacher_id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -150,7 +150,7 @@ export default function SettingsPage() {
         fd.append("email", email);
         fd.append("phone", phone);
 
-        const res = await fetch(`http://localhost:8000/api/profile/student/${user.student_id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/profile/student/${user.student_id}`, {
           method: "PUT",
           body: fd
         });
@@ -196,7 +196,7 @@ export default function SettingsPage() {
       fd.append("images", blob, "new_face.jpg");
 
       try {
-        const res = await fetch(`http://localhost:8000/api/profile/student/${user.student_id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/profile/student/${user.student_id}`, {
           method: "PUT",
           body: fd
         });
@@ -233,7 +233,7 @@ export default function SettingsPage() {
     filesArray.forEach(file => fd.append("images", file, file.name));
 
     try {
-      const res = await fetch(`http://localhost:8000/api/profile/student/${user.student_id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/profile/student/${user.student_id}`, {
         method: "PUT",
         body: fd
       });
@@ -305,7 +305,7 @@ export default function SettingsPage() {
     fd.append("audio", voiceBlob, "new_voice.wav");
 
     try {
-      const res = await fetch(`http://localhost:8000/api/profile/student/${user.student_id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/profile/student/${user.student_id}`, {
         method: "PUT",
         body: fd
       });
@@ -376,7 +376,7 @@ export default function SettingsPage() {
     fd.append("audio", testVoiceBlob, "test.wav");
 
     try {
-      const res = await fetch(`http://localhost:8000/api/profile/student/${user.student_id}/test-voice`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/profile/student/${user.student_id}/test-voice`, {
         method: "POST",
         body: fd
       });

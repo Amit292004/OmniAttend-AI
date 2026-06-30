@@ -68,7 +68,7 @@ function LiveAttendanceInner() {
     if (!stored) return;
     const u = JSON.parse(stored);
     if (!u.teacher_id) return;
-    fetch(`http://localhost:8000/api/subjects/teacher/${u.teacher_id}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/teacher/${u.teacher_id}`)
       .then(r => r.json())
       .then(d => {
         setSubjects(d.subjects || []);
@@ -81,7 +81,7 @@ function LiveAttendanceInner() {
   // ─── Load enrolled students when subject changes ───────
   useEffect(() => {
     if (!selectedSubject) return;
-    fetch(`http://localhost:8000/api/subjects/${selectedSubject}/students`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/${selectedSubject}/students`)
       .then(r => r.ok ? r.json() : { students: [] })
       .then(d => setEnrolledStudents(d.students || []))
       .catch(() => {});
@@ -171,7 +171,7 @@ function LiveAttendanceInner() {
     });
 
     try {
-      const res = await fetch("http://localhost:8000/api/attendance/face/bulk", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/face/bulk`, {
         method: "POST",
         body: fd
       });
@@ -246,7 +246,7 @@ function LiveAttendanceInner() {
     fd.append("subject_id", selectedSubject);
     fd.append("audio", recordedBlob, "voice.wav");
     try {
-      const res = await fetch("http://localhost:8000/api/attendance/voice", { method: "POST", body: fd });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/voice`, { method: "POST", body: fd });
       if (res.ok) {
         const data = await res.json();
         if (data.detected_count === 0) {

@@ -29,7 +29,7 @@ export default function AIInsightsPage() {
     const u = JSON.parse(userStr);
     if (u.teacher_id == null) return;
 
-    fetch(`http://localhost:8000/api/attendance/teacher/${u.teacher_id}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/teacher/${u.teacher_id}`)
       .then(r => r.json())
       .then(d => {
         setLogs(d.logs || []);

@@ -86,8 +86,9 @@ export async function GET(request: Request) {
       }
 
       // If the Google email doesn't match the Step 1 username/email, ensure both are registered admins
-      if (step1Payload.email !== email) {
-        const step1User = await prisma.user.findUnique({ where: { email: step1Payload.email } });
+      const step1Email = step1Payload.email as string;
+      if (step1Email !== email) {
+        const step1User = await prisma.user.findUnique({ where: { email: step1Email } });
         if (!step1User || step1User.role?.toUpperCase() !== 'ADMIN') {
           return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/admin?error=email_mismatch`);
         }

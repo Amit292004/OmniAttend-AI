@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const PORTAL_URL =
-  process.env.PORTAL_URL || "https://portal-delta-ashy.vercel.app";
+  process.env.PORTAL_URL || "https://portal-plum-zeta.vercel.app";
 
 const nextConfig: NextConfig = {
   async rewrites() {
