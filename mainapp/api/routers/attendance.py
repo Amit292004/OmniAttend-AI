@@ -85,11 +85,19 @@ async def process_voice_attendance(
         
     current_time = datetime.utcnow().isoformat()
     logs = []
+    results = []
     
     for node in enrolled_students:
         student = node['students']
         score = identified_results.get(student['student_id'], 0.0)
         is_present = bool(score > 0)
+        
+        results.append({
+            "name": student['name'],
+            "student_id": student['student_id'],
+            "source": "Voice Match" if is_present else "-",
+            "is_present": is_present
+        })
         
         logs.append({
             "student_id": student['student_id'],
@@ -97,13 +105,12 @@ async def process_voice_attendance(
             "timestamp": current_time,
             "is_present": is_present
         })
-        
-    if logs:
-        create_attendance(logs)
-        
+    
+    # NOTE: We do NOT save here. The frontend Review Dialog calls /save after teacher confirmation.
     return {
         "message": "Voice attendance processed",
         "detected_count": sum(1 for l in logs if l["is_present"]),
+        "results": results,
         "logs": logs
     }
 
@@ -157,15 +164,22 @@ async def process_bulk_face_attendance(
             "timestamp": current_time,
             "is_present": is_present
         })
-        
-    if logs:
-        create_attendance(logs)
-        
+    
+    # NOTE: We do NOT save here. The frontend Review Dialog calls /save after teacher confirmation.
     return {
         "message": "Bulk face attendance processed",
         "results": results,
         "logs": logs
     }
+    
+class SaveAttendanceRequest(BaseModel):
+    logs: List[dict]
+
+@router.post("/save")
+def save_attendance(req: SaveAttendanceRequest):
+    if req.logs:
+        create_attendance(req.logs)
+    return {"message": "Attendance saved successfully"}
 
 from fastapi.responses import StreamingResponse
 import pandas as pd

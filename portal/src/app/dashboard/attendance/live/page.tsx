@@ -7,10 +7,13 @@ import { Button } from "@/components/ui/button";
 import {
   Camera, Mic, Play, Pause, Square, ScanFace,
   CheckCircle2, AlertCircle, Clock, MicOff,
-  StopCircle, Radio, Users, Trash2, UploadCloud, FileImage, Loader2
+  StopCircle, Radio, Users, Trash2, UploadCloud, Loader2,
+  XCircle, CheckCircle, Save, X
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
+
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 interface LogEntry {
   name: string;
@@ -26,6 +29,176 @@ interface GalleryPhoto {
   blob: Blob;
   name: string;
 }
+
+interface ReviewRow {
+  student_id: number;
+  name: string;
+  source: string;
+  is_present: boolean;
+}
+
+interface ReviewDialogProps {
+  rows: ReviewRow[];
+  logs: Array<{ student_id: number; subject_id: number; timestamp: string; is_present: boolean }>;
+  analysisType: "Face" | "Voice";
+  onConfirm: (finalLogs: Array<{ student_id: number; subject_id: number; timestamp: string; is_present: boolean }>) => Promise<void>;
+  onDiscard: () => void;
+  saving: boolean;
+}
+
+// ─── Review Dialog Component ─────────────────────────────────────────────────
+
+function ReviewDialog({ rows: initialRows, logs: initialLogs, analysisType, onConfirm, onDiscard, saving }: ReviewDialogProps) {
+  const [rows, setRows] = useState<ReviewRow[]>(initialRows);
+
+  const toggleStatus = (studentId: number) => {
+    setRows(prev => prev.map(r =>
+      r.student_id === studentId ? { ...r, is_present: !r.is_present } : r
+    ));
+  };
+
+  const handleConfirm = async () => {
+    // Build final logs based on the (possibly edited) rows
+    const finalLogs = initialLogs.map(log => ({
+      ...log,
+      is_present: rows.find(r => r.student_id === log.student_id)?.is_present ?? log.is_present
+    }));
+    await onConfirm(finalLogs);
+  };
+
+  const presentCount = rows.filter(r => r.is_present).length;
+  const absentCount = rows.length - presentCount;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ duration: 0.2 }}
+        className="bg-zinc-900 border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh]"
+      >
+        {/* Dialog Header */}
+        <div className="flex items-start justify-between p-6 border-b border-white/10">
+          <div>
+            <h2 className="text-xl font-bold flex items-center gap-2">
+              {analysisType === "Face" ? <ScanFace className="w-5 h-5 text-primary" /> : <Mic className="w-5 h-5 text-secondary" />}
+              Review {analysisType} Attendance
+            </h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Review results below. You can toggle statuses before confirming.
+            </p>
+          </div>
+          <button onClick={onDiscard} className="text-muted-foreground hover:text-white transition-colors mt-1">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Summary Chips */}
+        <div className="flex gap-4 px-6 py-4 border-b border-white/5">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/20">
+            <CheckCircle className="w-4 h-4 text-success" />
+            <span className="text-sm font-semibold text-success">{presentCount} Present</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-error/10 border border-error/20">
+            <XCircle className="w-4 h-4 text-error" />
+            <span className="text-sm font-semibold text-error">{absentCount} Absent</span>
+          </div>
+          <div className="ml-auto text-xs text-muted-foreground flex items-center">
+            Click any row to toggle status
+          </div>
+        </div>
+
+        {/* Roster Table */}
+        <div className="overflow-y-auto flex-1">
+          <table className="w-full border-collapse text-left">
+            <thead className="sticky top-0 bg-zinc-900 z-10">
+              <tr className="border-b border-white/10 text-xs font-semibold text-muted-foreground uppercase">
+                <th className="px-6 py-3">Student Name</th>
+                <th className="px-6 py-3">Detection Source</th>
+                <th className="px-6 py-3 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {rows.map((row) => (
+                <tr
+                  key={row.student_id}
+                  onClick={() => toggleStatus(row.student_id)}
+                  className={`cursor-pointer transition-colors hover:bg-white/5 ${row.is_present ? "bg-success/5" : ""}`}
+                >
+                  <td className="px-6 py-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className={`w-2 h-2 rounded-full shrink-0 ${row.is_present ? "bg-success" : "bg-muted-foreground/30"}`} />
+                      <span className="text-sm font-medium">{row.name}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-3 text-sm text-muted-foreground">{row.source || "—"}</td>
+                  <td className="px-6 py-3 text-right">
+                    {row.is_present ? (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-success/15 text-success border border-success/20">
+                        <CheckCircle className="w-3 h-3" /> Present
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-error/15 text-error border border-error/20">
+                        <XCircle className="w-3 h-3" /> Absent
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center justify-between p-6 border-t border-white/10">
+          <Button variant="ghost" onClick={onDiscard} disabled={saving} className="text-muted-foreground">
+            <X className="w-4 h-4 mr-2" /> Discard
+          </Button>
+          <Button
+            onClick={handleConfirm}
+            disabled={saving}
+            className="bg-success text-white hover:bg-success/90 px-6"
+          >
+            {saving ? (
+              <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving…</>
+            ) : (
+              <><Save className="w-4 h-4 mr-2" /> Confirm & Save</>
+            )}
+          </Button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+// ─── Toast Component ──────────────────────────────────────────────────────────
+
+function Toast({ message, type, onClose }: { message: string; type: "success" | "error"; onClose: () => void }) {
+  useEffect(() => {
+    const t = setTimeout(onClose, 4000);
+    return () => clearTimeout(t);
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 50 }}
+      className={`fixed bottom-6 right-6 z-[100] flex items-center gap-3 px-5 py-3 rounded-xl shadow-xl border ${
+        type === "success"
+          ? "bg-success/10 border-success/30 text-success"
+          : "bg-error/10 border-error/30 text-error"
+      }`}
+    >
+      {type === "success" ? <CheckCircle2 className="w-5 h-5 shrink-0" /> : <AlertCircle className="w-5 h-5 shrink-0" />}
+      <span className="text-sm font-medium">{message}</span>
+      <button onClick={onClose} className="ml-2 opacity-60 hover:opacity-100"><X className="w-4 h-4" /></button>
+    </motion.div>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
 function LiveAttendanceInner() {
   const searchParams = useSearchParams();
@@ -61,6 +234,17 @@ function LiveAttendanceInner() {
   const [processing, setProcessing] = useState(false);
   const [elapsedSecs, setElapsedSecs] = useState(0);
   const sessionTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // ─── Review Dialog State ───────────────────────────────
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [reviewRows, setReviewRows] = useState<ReviewRow[]>([]);
+  const [pendingLogs, setPendingLogs] = useState<any[]>([]);
+  const [pendingAnalysisType, setPendingAnalysisType] = useState<"Face" | "Voice">("Face");
+  const [saving, setSaving] = useState(false);
+
+  // ─── Toast ─────────────────────────────────────────────
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const showToast = (message: string, type: "success" | "error") => setToast({ message, type });
 
   // ─── Load teacher subjects ─────────────────────────────
   useEffect(() => {
@@ -159,7 +343,7 @@ function LiveAttendanceInner() {
     setGallery(prev => prev.filter(p => p.id !== id));
   };
 
-  // ─── Run Face Analysis (Bulk / Single list) ────────────
+  // ─── Run Face Analysis → open Review Dialog ────────────
   const runFaceAnalysis = async () => {
     if (gallery.length === 0 || !selectedSubject) return;
     setProcessing(true);
@@ -178,35 +362,20 @@ function LiveAttendanceInner() {
 
       if (res.ok) {
         const data = await res.json();
-        
-        // Map detected students into UI logs
-        const newLogs: LogEntry[] = data.results
-          .filter((r: any) => r.is_present)
-          .map((r: any) => ({
-            name: r.name,
-            studentId: r.student_id,
-            type: "Face",
-            time: "Just now",
-            success: true
-          }));
-
-        setLogs(prev => [...newLogs, ...prev]);
-        setPresentIds(prev => {
-          const next = new Set(prev);
-          newLogs.forEach(l => next.add(l.studentId));
-          return next;
-        });
-
         // Clean up URLs and empty gallery
         gallery.forEach(p => URL.revokeObjectURL(p.url));
         setGallery([]);
-        alert(`Face Analysis Complete. Recognized ${newLogs.length} students!`);
+        // Open Review Dialog
+        setReviewRows(data.results || []);
+        setPendingLogs(data.logs || []);
+        setPendingAnalysisType("Face");
+        setReviewOpen(true);
       } else {
         const e = await res.json();
-        alert(e.detail || "Analysis failed.");
+        showToast(e.detail || "Face analysis failed.", "error");
       }
     } catch {
-      alert("Connection error executing face analysis.");
+      showToast("Connection error executing face analysis.", "error");
     } finally {
       setProcessing(false);
     }
@@ -230,7 +399,7 @@ function LiveAttendanceInner() {
       mr.start();
       setIsRecording(true);
       timerRef.current = setInterval(() => setRecordingTime(t => t + 1), 1000);
-    } catch { alert("Microphone access denied."); }
+    } catch { showToast("Microphone access denied.", "error"); }
   };
 
   const stopVoiceRecording = () => {
@@ -249,26 +418,60 @@ function LiveAttendanceInner() {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/voice`, { method: "POST", body: fd });
       if (res.ok) {
         const data = await res.json();
-        if (data.detected_count === 0) {
-          alert("No student voices recognized. Make sure students have voice samples saved.");
-        } else {
-          const newLogs: LogEntry[] = data.logs
-            .filter((l: any) => l.is_present)
-            .map((l: any) => {
-              const stu = enrolledStudents.find((s: any) => s.student_id === l.student_id);
-              return { name: stu?.name || `Student #${l.student_id}`, studentId: l.student_id, type: "Voice", time: "Just now", success: true };
-            });
-          setLogs(prev => [...newLogs, ...prev]);
-          setPresentIds(prev => { const next = new Set(prev); newLogs.forEach(l => next.add(l.studentId)); return next; });
-        }
         setRecordedBlob(null);
         setRecordingTime(0);
+        // Open Review Dialog
+        setReviewRows(data.results || []);
+        setPendingLogs(data.logs || []);
+        setPendingAnalysisType("Voice");
+        setReviewOpen(true);
       } else {
         const e = await res.json();
-        alert(e.detail || "Voice processing failed.");
+        showToast(e.detail || "Voice processing failed.", "error");
       }
-    } catch { alert("Connection error."); }
+    } catch { showToast("Connection error.", "error"); }
     finally { setVoiceProcessing(false); }
+  };
+
+  // ─── Confirm & Save ────────────────────────────────────
+  const handleConfirmSave = async (finalLogs: any[]) => {
+    setSaving(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ logs: finalLogs })
+      });
+      if (res.ok) {
+        // Update the local roster
+        const presentSet = new Set(finalLogs.filter(l => l.is_present).map(l => l.student_id as number));
+        setPresentIds(prev => { const next = new Set(prev); presentSet.forEach(id => next.add(id)); return next; });
+
+        // Add entries to the recognition log
+        const newLogEntries: LogEntry[] = finalLogs
+          .filter(l => l.is_present)
+          .map(l => {
+            const stu = enrolledStudents.find((s: any) => s.student_id === l.student_id);
+            return {
+              name: stu?.name || `Student #${l.student_id}`,
+              studentId: l.student_id,
+              type: pendingAnalysisType,
+              time: "Just now",
+              success: true
+            };
+          });
+        setLogs(prev => [...newLogEntries, ...prev]);
+
+        setReviewOpen(false);
+        showToast(`✅ Attendance saved! ${finalLogs.filter(l => l.is_present).length} students marked present.`, "success");
+      } else {
+        showToast("Failed to save attendance. Please try again.", "error");
+      }
+    } catch {
+      showToast("Connection error while saving.", "error");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const subjectObj = subjects.find(s => String(s.subject_id) === selectedSubject);
@@ -276,6 +479,27 @@ function LiveAttendanceInner() {
   return (
     <DashboardLayout>
       <div className="flex flex-col space-y-6">
+
+        {/* Review Dialog (shown on top when open) */}
+        <AnimatePresence>
+          {reviewOpen && (
+            <ReviewDialog
+              rows={reviewRows}
+              logs={pendingLogs}
+              analysisType={pendingAnalysisType}
+              onConfirm={handleConfirmSave}
+              onDiscard={() => setReviewOpen(false)}
+              saving={saving}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Toast */}
+        <AnimatePresence>
+          {toast && (
+            <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+          )}
+        </AnimatePresence>
 
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -524,7 +748,7 @@ function LiveAttendanceInner() {
               </div>
               <div className="flex-1 overflow-y-auto p-3 space-y-2 no-scrollbar">
                 {logs.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center pt-8">No detections yet.</p>
+                  <p className="text-sm text-muted-foreground text-center pt-8">No confirmed sessions yet.</p>
                 ) : logs.map((log, idx) => (
                   <div key={idx} className={`flex items-start gap-3 p-3 rounded-lg ${log.type === "Face" ? "bg-primary/5 border border-primary/10" : "bg-secondary/5 border border-secondary/10"}`}>
                     <div className="mt-0.5 shrink-0">
