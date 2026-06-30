@@ -67,8 +67,18 @@ def get_students(subject_id: int):
 @router.get("/{subject_id}/students")
 def get_students_by_subject(subject_id: int):
     """Alias used by the live attendance page."""
-    students = get_subject_students(subject_id)
-    # Expose whether a student has a voice embedding (True/False only — not the raw vector)
-    for s in students:
-        s["voice_embedding"] = bool(s.get("voice_embedding"))
-    return {"students": students}
+    relations = get_subject_students(subject_id)
+    flattened = []
+    for r in relations:
+        student = r.get("students")
+        if student:
+            flattened.append({
+                "student_id": student.get("student_id"),
+                "name": student.get("name"),
+                "email": student.get("email"),
+                "phone": student.get("phone"),
+                "voice_embedding": bool(student.get("voice_embedding")),
+                "face_embedding": bool(student.get("face_embedding"))
+            })
+    return {"students": flattened}
+

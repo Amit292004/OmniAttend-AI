@@ -252,10 +252,12 @@ function LiveAttendanceInner() {
         if (data.detected_count === 0) {
           alert("No student voices recognized. Make sure students have voice samples saved.");
         } else {
-          const newLogs: LogEntry[] = data.logs.map((l: any) => {
-            const stu = enrolledStudents.find((s: any) => s.student_id === l.student_id);
-            return { name: stu?.name || `Student #${l.student_id}`, studentId: l.student_id, type: "Voice", time: "Just now", success: true };
-          });
+          const newLogs: LogEntry[] = data.logs
+            .filter((l: any) => l.is_present)
+            .map((l: any) => {
+              const stu = enrolledStudents.find((s: any) => s.student_id === l.student_id);
+              return { name: stu?.name || `Student #${l.student_id}`, studentId: l.student_id, type: "Voice", time: "Just now", success: true };
+            });
           setLogs(prev => [...newLogs, ...prev]);
           setPresentIds(prev => { const next = new Set(prev); newLogs.forEach(l => next.add(l.studentId)); return next; });
         }

@@ -66,24 +66,36 @@ async def process_voice_attendance(
 ):
     contents = await audio.read()
     
-    # We need to build the candidates_dict from all students
-    all_students = get_all_students()
+    # Query enrolled students for this subject
+    from src.database.config import supabase
+    enrolled_res = supabase.table('subject_students').select("*, students(*)").eq('subject_id', subject_id).execute()
+    enrolled_students = enrolled_res.data
+    
+    if not enrolled_students:
+        raise HTTPException(status_code=400, detail="No students enrolled in this course")
+        
     candidates_dict = {
-        s['student_id']: np.array(s['voice_embedding']) 
-        for s in all_students if s.get('voice_embedding')
+        s['students']['student_id']: np.array(s['students']['voice_embedding'])
+        for s in enrolled_students if s['students'].get('voice_embedding')
     }
     
-    identified_results = process_bulk_audio(contents, candidates_dict)
-    
+    identified_results = {}
+    if candidates_dict:
+        identified_results = process_bulk_audio(contents, candidates_dict)
+        
     current_time = datetime.utcnow().isoformat()
     logs = []
     
-    for student_id, score in identified_results.items():
+    for node in enrolled_students:
+        student = node['students']
+        score = identified_results.get(student['student_id'], 0.0)
+        is_present = bool(score > 0)
+        
         logs.append({
-            "student_id": student_id,
+            "student_id": student['student_id'],
             "subject_id": subject_id,
             "timestamp": current_time,
-            "is_present": True
+            "is_present": is_present
         })
         
     if logs:
@@ -91,9 +103,10 @@ async def process_voice_attendance(
         
     return {
         "message": "Voice attendance processed",
-        "detected_count": len(identified_results),
+        "detected_count": sum(1 for l in logs if l["is_present"]),
         "logs": logs
     }
+
 
 @router.delete("/session")
 def remove_attendance_session(subject_id: int, timestamp: str):
