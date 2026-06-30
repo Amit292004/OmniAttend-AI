@@ -24,3 +24,6 @@ resemblyzer
 
 xlsxwriter
 python-dotenv
+fastapi
+uvicorn[standard]
+python-multipart
