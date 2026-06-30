@@ -101,7 +101,7 @@ export default function StudentDashboard() {
       }
 
       // 4. Wrong role — redirect teachers away
-      if (currentUser.teacher_id != null) {
+      if ('teacher_id' in currentUser && currentUser.teacher_id !== null) {
         window.location.href = "/portal/dashboard/teacher";
         return;
       }

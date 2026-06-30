@@ -465,10 +465,11 @@ function LiveAttendanceInner() {
         setReviewOpen(false);
         showToast(`✅ Attendance saved! ${finalLogs.filter(l => l.is_present).length} students marked present.`, "success");
       } else {
-        showToast("Failed to save attendance. Please try again.", "error");
+        const errorText = await res.text();
+        showToast(`Failed to save: ${res.status} ${errorText.substring(0, 50)}`, "error");
       }
-    } catch {
-      showToast("Connection error while saving.", "error");
+    } catch (err: any) {
+      showToast(`Connection error: ${err.message}`, "error");
     } finally {
       setSaving(false);
     }

@@ -213,7 +213,7 @@ def export_attendance(
         })
         
     df = pd.DataFrame(data)
-    df['Date'] = pd.to_datetime(df['ts_group']).dt.date
+    df['Date'] = pd.to_datetime(df['ts_group'], format='mixed').dt.date
     
     try:
         s_date = datetime.strptime(start_date, "%Y-%m-%d").date()

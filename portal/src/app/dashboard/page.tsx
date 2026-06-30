@@ -10,7 +10,7 @@ export default function DashboardRedirect() {
       if (userStr) {
         try {
           const user = JSON.parse(userStr);
-          if (user.teacher_id != null) {
+          if ('teacher_id' in user && user.teacher_id !== null) {
             window.location.href = "/portal/dashboard/teacher";
           } else {
             window.location.href = "/portal/dashboard/student";

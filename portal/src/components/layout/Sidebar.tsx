@@ -63,7 +63,7 @@ export function Sidebar() {
     const userStr = localStorage.getItem("user");
     if (userStr) {
       const user = JSON.parse(userStr);
-      if (user.teacher_id != null) {
+      if ('teacher_id' in user && user.teacher_id !== null) {
         setUserRole("teacher");
         setUserName(user.name || "Teacher");
       } else {
