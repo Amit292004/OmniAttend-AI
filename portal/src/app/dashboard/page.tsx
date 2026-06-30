@@ -34,7 +34,7 @@ export default function DashboardRedirect() {
           if (landingUser?.email) {
             // Ask backend to convert email → teacher/student profile
             const profileRes = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/auth/profile-by-email`,
+              `${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/auth/profile-by-email`,
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

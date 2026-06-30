@@ -27,7 +27,7 @@ export default function AnalyticsPage() {
     setUser(u);
     if (u.teacher_id == null) return; // student guard
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/teacher/${u.teacher_id}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/attendance/teacher/${u.teacher_id}`)
       .then(r => r.json())
       .then(data => { setLogs(data.logs || []); setLoading(false); })
       .catch(() => setLoading(false));
@@ -130,7 +130,7 @@ export default function AnalyticsPage() {
     const monthAgo = new Date(Date.now() - 30 * 864e5).toISOString().split("T")[0];
     const code = subjectData[0]?.name || "ALL";
     window.open(
-      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/export?teacher_id=${user.teacher_id}&subject_code=${code}&start_date=${monthAgo}&end_date=${today}`,
+      `${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/attendance/export?teacher_id=${user.teacher_id}&subject_code=${code}&start_date=${monthAgo}&end_date=${today}`,
       "_blank"
     );
   };

@@ -33,8 +33,8 @@ export default function SubjectsPage() {
       setLoading(true);
       const isTeach = currentUser.teacher_id != null;
       const url = isTeach
-        ? `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/teacher/${currentUser.teacher_id}`
-        : `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/student/${currentUser.student_id}`;
+        ? `${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/subjects/teacher/${currentUser.teacher_id}`
+        : `${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/subjects/student/${currentUser.student_id}`;
       
       const res = await fetch(url);
       if (res.ok) {
@@ -68,7 +68,7 @@ export default function SubjectsPage() {
     e.preventDefault();
     setErrorMsg("");
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/subjects/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -99,7 +99,7 @@ export default function SubjectsPage() {
     setErrorMsg("");
     try {
       // 1. Get subject details from code
-      const codeRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/code/${enrollCode}`);
+      const codeRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/subjects/code/${enrollCode}`);
       if (!codeRes.ok) {
         setErrorMsg("Subject Code not found!");
         return;
@@ -107,7 +107,7 @@ export default function SubjectsPage() {
       const subject = await codeRes.json();
 
       // 2. Enroll
-      const enrollRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/enroll`, {
+      const enrollRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/subjects/enroll`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -132,7 +132,7 @@ export default function SubjectsPage() {
   const handleDeleteSubject = async (subjectId: number) => {
     if (!confirm("Are you sure you want to delete this subject?")) return;
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/${subjectId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/subjects/${subjectId}`, {
         method: "DELETE"
       });
       if (res.ok) {

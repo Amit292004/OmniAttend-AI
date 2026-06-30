@@ -114,7 +114,7 @@ export default function TeacherDashboard() {
             const { user: landingUser } = await meRes.json();
             if (landingUser?.email) {
               const profileRes = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/auth/profile-by-email`,
+                `${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/auth/profile-by-email`,
                 {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
@@ -156,8 +156,8 @@ export default function TeacherDashboard() {
         try {
           setLoading(true);
           const [subRes, attRes] = await Promise.all([
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/teacher/${currentUser.teacher_id}`),
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/teacher/${currentUser.teacher_id}`)
+            fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/subjects/teacher/${currentUser.teacher_id}`),
+            fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/attendance/teacher/${currentUser.teacher_id}`)
           ]);
           if (subRes.ok) {
             const data = await subRes.json();

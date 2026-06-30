@@ -40,7 +40,7 @@ export default function AttendancePage() {
       
       if (isTeach) {
         // Teacher
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/teacher/${currentUser.teacher_id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/attendance/teacher/${currentUser.teacher_id}`);
         if (res.ok) {
           const data = await res.json();
           const logs = data.logs || [];
@@ -77,7 +77,7 @@ export default function AttendancePage() {
         }
       } else {
         // Student
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/student/${currentUser.student_id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/attendance/student/${currentUser.student_id}`);
         if (res.ok) {
           const data = await res.json();
           const sortedLogs = (data.logs || []).sort((a: any, b: any) => 
@@ -122,7 +122,7 @@ export default function AttendancePage() {
   const handleDeleteSession = async (subjectId: number, timestamp: string) => {
     if (!confirm("Are you sure you want to delete this entire attendance session?")) return;
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/session?subject_id=${subjectId}&timestamp=${timestamp}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/attendance/session?subject_id=${subjectId}&timestamp=${timestamp}`, {
         method: "DELETE"
       });
       if (res.ok) {
@@ -140,7 +140,7 @@ export default function AttendancePage() {
       alert("Please fill all export fields!");
       return;
     }
-    const url = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/export?teacher_id=${user.teacher_id}&subject_code=${exportSubject}&start_date=${exportStartDate}&end_date=${exportEndDate}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/attendance/export?teacher_id=${user.teacher_id}&subject_code=${exportSubject}&start_date=${exportStartDate}&end_date=${exportEndDate}`;
     window.open(url, "_blank");
   };
 

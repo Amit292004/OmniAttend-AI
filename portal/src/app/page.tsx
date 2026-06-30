@@ -12,7 +12,7 @@ export default function PortalPage() {
   const [studentCount, setStudentCount] = React.useState<number | null>(null);
 
   React.useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/students`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/attendance/students`)
       .then((res) => res.json())
       .then((data) => {
         if (data && data.students) {

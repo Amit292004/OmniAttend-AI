@@ -91,7 +91,7 @@ export default function StudentLogin() {
       formData.append("image", blob, "capture.jpg");
 
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/auth/student/login`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/auth/student/login`, {
           method: "POST",
           body: formData
         });
@@ -170,10 +170,10 @@ export default function StudentLogin() {
 
     if (joinCode) {
       try {
-        const subRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/code/${joinCode}`);
+        const subRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/subjects/code/${joinCode}`);
         if (subRes.ok) {
           const subject = await subRes.json();
-          await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/enroll`, {
+          await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/subjects/enroll`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -225,7 +225,7 @@ export default function StudentLogin() {
 
     setSendingOtp(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/otp/send`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/otp/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: regEmail, name: regName })
@@ -247,7 +247,7 @@ export default function StudentLogin() {
   const handleResendOtp = async () => {
     setErrorMsg(""); setSendingOtp(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/otp/send`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/otp/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: regEmail, name: regName })
@@ -272,7 +272,7 @@ export default function StudentLogin() {
 
     try {
       // 1. Verify OTP
-      const verRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/otp/verify`, {
+      const verRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/otp/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: regEmail, otp: otp.join("") })
@@ -297,7 +297,7 @@ export default function StudentLogin() {
         formData.append("audio", voiceBlob, "register_voice.wav");
       }
 
-      const regRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/auth/student/register`, {
+      const regRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/auth/student/register`, {
         method: "POST",
         body: formData
       });

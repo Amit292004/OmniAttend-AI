@@ -70,7 +70,7 @@ export default function StudentDashboard() {
             const { user: landingUser } = await meRes.json();
             if (landingUser?.email) {
               const profileRes = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/auth/profile-by-email`,
+                `${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/auth/profile-by-email`,
                 {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
@@ -112,8 +112,8 @@ export default function StudentDashboard() {
         try {
           setLoading(true);
           const [attRes, subRes] = await Promise.all([
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/attendance/student/${currentUser.student_id}`),
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/subjects/student/${currentUser.student_id}`)
+            fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/attendance/student/${currentUser.student_id}`),
+            fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/subjects/student/${currentUser.student_id}`)
           ]);
           if (attRes.ok) {
             const data = await attRes.json();

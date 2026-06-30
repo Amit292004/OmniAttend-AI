@@ -48,7 +48,7 @@ export default function TeacherLogin() {
     setErrorMsg(""); setSuccessMsg("");
     const formData = new FormData(e.currentTarget);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/auth/teacher/login`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/auth/teacher/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -109,7 +109,7 @@ export default function TeacherLogin() {
     setRegForm(newForm);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/otp/send`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/otp/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: newForm.email, name: newForm.name })
@@ -131,7 +131,7 @@ export default function TeacherLogin() {
   const handleResendOtp = async () => {
     setErrorMsg(""); setSendingOtp(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/otp/send`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/otp/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: regForm.email, name: regForm.name })
@@ -157,7 +157,7 @@ export default function TeacherLogin() {
 
     try {
       // 1. Verify OTP
-      const verRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/otp/verify`, {
+      const verRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/otp/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: regForm.email, otp: otpValue })
@@ -172,7 +172,7 @@ export default function TeacherLogin() {
       // 2. Create account
       setVerifyingOtp(false);
       setRegistering(true);
-      const regRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/auth/teacher/register`, {
+      const regRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://omniattend-backend-production.up.railway.app"}/api/auth/teacher/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(regForm)
