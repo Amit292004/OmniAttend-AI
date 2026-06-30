@@ -1,15 +1,18 @@
 import type { NextConfig } from "next";
 
+const PORTAL_URL =
+  process.env.PORTAL_URL || "https://portal-delta-ashy.vercel.app";
+
 const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
         source: '/portal',
-        destination: 'http://localhost:3001/portal',
+        destination: `${PORTAL_URL}/portal`,
       },
       {
         source: '/portal/:path*',
-        destination: 'http://localhost:3001/portal/:path*',
+        destination: `${PORTAL_URL}/portal/:path*`,
       },
     ];
   },
