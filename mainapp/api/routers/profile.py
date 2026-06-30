@@ -93,6 +93,10 @@ async def update_student_profile(
     if not result:
         raise HTTPException(status_code=400, detail="Update failed")
 
+    # Clear face classifier cache to retrain with new data
+    from src.pipelines.face_pipeline import train_classifier
+    train_classifier()
+
     updated = result[0]
     return {"message": "Profile updated successfully", "user": updated}
 
