@@ -2,17 +2,20 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import random
-import streamlit as st
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def send_otp_email(to_email, otp_code, user_name):
-    # Retrieve SMTP credentials from st.secrets
+    # Retrieve SMTP credentials from environment variables
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
     try:
-        sender_email = st.secrets["EMAIL_USER"]
-        sender_password = st.secrets["EMAIL_PASS"]
+        sender_email = os.environ["EMAIL_USER"]
+        sender_password = os.environ["EMAIL_PASS"]
     except KeyError:
-        print("EMAIL_USER or EMAIL_PASS not found in secrets.toml")
+        print("EMAIL_USER or EMAIL_PASS not found in environment variables")
         return False
     
     # Create message
